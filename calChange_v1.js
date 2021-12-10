@@ -42,11 +42,9 @@ const calChange = (pay, price) => {
 
       billArr.map((el) => {
         // FIND THE BILL WE HAVE
-        if (num >= el) {
-          while (num >= el) {
-            billChange.push(el); // IF THE NUM >= THE BILL WE HAVE JUST PUSH IN ARRAY FOR CHANGE
-            num -= el;
-          }
+        while (num >= el) {
+          billChange.push(el); // IF THE NUM >= THE BILL WE HAVE JUST PUSH IN ARRAY FOR CHANGE
+          num -= el;
         }
       });
       i *= 10;
