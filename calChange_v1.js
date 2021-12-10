@@ -5,7 +5,6 @@ const outPutBill = document.getElementById("outPutBill");
 if (form) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log("hi");
     const price = document.getElementById("price").value;
     const pay = document.getElementById("pay").value;
 
@@ -16,73 +15,51 @@ if (form) {
 }
 
 const calChange = (pay, price) => {
-  let change = pay - price;
+  //CALCULATE CHANGE
+  let change = pay - price; //EX. 1234
+
+  //CHECK INPUT BILL PAYMENT
 
   if (change === 0) {
+    //A> IN CASE NO NEED TO CHANGE
     alert("Thank you : No any change");
     return 0;
   } else if (change < 0) {
+    //B> IN CASE CUSTOMER INPUT LESS THAN INPUT PRICE
     alert("Please pay more");
     return;
   } else {
+    //C> CALCULATE CHANGE
     outPutBill.innerHTML = `Recieve the change : ${change} `;
-    let bill = [];
 
-    if (change / 100) {
-      let calBill = Math.floor(change / 100);
-      change = change - calBill * 100;
+    const billArr = [1000, 500, 100, 50, 20, 10, 5, 2, 1]; // ALL BILL WE HAVE
+    let billChange = []; // ARRAY FOR RECIEVE BILL FOR CHANGE
+    let i = 10; //FOR SEPARATE THE BILL
 
-      while (calBill > 0) {
-        if (calBill > 5) {
-          bill.push(500);
-          calBill -= 5;
-        } else {
-          bill.push(100);
-          calBill -= 1;
+    while (change > 0) {
+      let num = change % i; // MOD TO FIND EACH UNIT =>  4 ,30 ,200,1000
+      change -= num; // MINUS THE CHANGE FOR NEXT LOOP  => 1230 ,1200,1000
+
+      billArr.map((el) => {
+        // FIND THE BILL WE HAVE
+        if (num >= el) {
+          while (num >= el) {
+            billChange.push(el); // IF THE NUM >= THE BILL WE HAVE JUST PUSH IN ARRAY FOR CHANGE
+            num -= el;
+          }
         }
-      }
+      });
+      i *= 10;
     }
-
-    if (change / 10) {
-      let calBill = Math.floor(change / 10);
-      change = change - calBill * 10;
-      while (calBill > 0) {
-        if (calBill > 5) {
-          bill.push(50);
-          calBill -= 5;
-        } else if (calBill >= 2) {
-          bill.push(20);
-          calBill -= 2;
-        } else {
-          bill.push(10);
-          calBill -= 1;
-        }
-      }
-    }
-
-    if (change < 10) {
-      let calBill = change;
-      while (calBill > 0) {
-        if (calBill > 5) {
-          bill.push(5);
-          calBill -= 5;
-        } else if (calBill >= 2) {
-          bill.push(2);
-          calBill -= 2;
-        } else {
-          bill.push(1);
-          calBill -= 1;
-        }
-      }
-    }
-
-    return bill;
+    return billChange;
   }
 };
 
+//THIS IS FOR COUNT THE BILL AND RENDER TO HTML
+
 const countBill = (bill) => {
-  //   console.log(bill);
   let countBill = {
+    bill_1000: bill.filter((el) => el === 1000).length,
     bill_500: bill.filter((el) => el === 500).length,
     bill_100: bill.filter((el) => el === 100).length,
     bill_50: bill.filter((el) => el === 50).length,
